@@ -13,6 +13,14 @@ class Scenario1:
     def run(self):
         self.lcd.show("Booting...")
 
+        face_ok = self.vision.detect_owner()
+
+        if face_ok:
+            self.lcd.show("Face Detected", "Checking Voice...")
+            self.voice.detect_command()
+            self.welcome()
+
+
         if not self.vision.detect_owner():
             self.lcd.show("Access Denied")
             return
@@ -21,7 +29,6 @@ class Scenario1:
             self.lcd.show("No Voice")
             return
 
-        self.welcome()
 
     def welcome(self):
         self.state.welcomed = True
