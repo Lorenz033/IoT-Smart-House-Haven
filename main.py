@@ -6,6 +6,7 @@ from services.vision_service import VisionService
 from services.voice_service import VoiceService
 from controller.app_controller import AppController
 
+
 BROKER = "localhost"
 PORT = 1883
 
