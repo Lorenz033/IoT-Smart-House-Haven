@@ -4,6 +4,8 @@ from services.gpio_service import GPIOService
 from view.lcd_view import LCDView
 from services.vision_service import VisionService
 from services.voice_service import VoiceService
+from services.sensor_service import SensorService
+from model.environment_model import EnvironmentModel
 from controller.app_controller import AppController
 
 
@@ -12,6 +14,9 @@ PORT = 1883
 
 TOPIC_DI1 = "WSA2025/DI1"
 TOPIC_RELAY = "WSA2025/RELAY01"
+
+sensor = SensorService(pin=4)
+environment = EnvironmentModel()
 
 # =========================
 # INIT COMPONENTS
@@ -36,12 +41,11 @@ controller = AppController(
     gpio,
     lcd,
     vision,
-    voice
+    voice,
+    sensor,
+    environment 
 )
 
-# =========================
-# MQTT CONNECT
-# =========================
 client = mqtt_service.connect(
     on_connect=lambda c, u, f, rc: c.subscribe([
         (TOPIC_DI1, 0),
@@ -53,3 +57,5 @@ client = mqtt_service.connect(
 
 print("System running...")
 client.loop_forever()
+
+

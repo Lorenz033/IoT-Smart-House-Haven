@@ -11,7 +11,7 @@ class Scenario1:
         self.state = state
 
     def run(self):
-        self.lcd.show("Booting...")
+        self.lcd.show("Scanning Owner...")
 
         face_ok = self.vision.detect_owner()
 
