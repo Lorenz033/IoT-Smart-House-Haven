@@ -34,13 +34,19 @@ class Scenario1:
         self.lcd.show("WELCOME HOME", ":)")
         self.gpio.unlock()
         self.mqtt.publish("WSA2025/RELAY01", "ON")
+        self.publish("WSA2025/DO1", "ON")
+        self.publish("WSA2025/DO2", "ON")
+        self.publish("WSA2025/DO3", "ON")
+        self.publish("WSA2025/DO4", "ON")
 
     def leave(self):
         self.state.welcomed = False
         self.state.running = True
-
         self.lcd.show("GOODBYE")
         self.gpio.lock()
         self.mqtt.publish("WSA2025/RELAY01", "OFF")
-
+        self.publish("WSA2025/DO1", "OFF")
+        self.publish("WSA2025/DO2", "OFF")
+        self.publish("WSA2025/DO3", "OFF")
+        self.publish("WSA2025/DO4", "OFF")
         self.state.running = False

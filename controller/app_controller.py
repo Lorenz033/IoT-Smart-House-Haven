@@ -96,3 +96,12 @@ class AppController:
                 self.scenario1.gpio.lock()
             else:
                 self.scenario1.gpio.unlock()
+
+        elif topic.startswith("WSA2025/DO"):
+
+                led = topic.split("/")[-1]
+
+                if payload == "ON":
+                    self.gpio.set_led(led, "ON")
+                else:
+                    self.gpio.set_led(led, "OFF")
