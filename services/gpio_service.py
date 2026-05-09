@@ -9,10 +9,10 @@ class GPIOService:
 
   
         self.leds = {
-            "LED1": 17,
-            "LED2": 27,
-            "LED3": 22,
-            "LED4": 23
+            "DO1": 17,
+            "DO2": 27,
+            "DO3": 22,
+            "DO4": 23
         }
 
         GPIO.setwarnings(False)
