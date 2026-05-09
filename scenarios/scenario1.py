@@ -17,23 +17,20 @@ class Scenario1:
 
         if face_ok:
             self.lcd.show("Face Detected", "Checking Voice...")
-            self.voice.detect_command()
-            self.welcome()
+            voice_ok = self.voice.detect_command()
+            
+            if voice_ok:
+                self.welcome()
+            else:
+                self.lcd.show("Voice Not Detected", "Access Denied")
+        else:
+            self.lcd.show("Face Not Detected", "Access Denied")
 
-
-        if not self.vision.detect_owner():
-            self.lcd.show("Access Denied")
-            return
-
-        if not self.voice.detect_command():
-            self.lcd.show("No Voice")
-            return
+        self.state.running = False
 
 
     def welcome(self):
         self.state.welcomed = True
-        self.state.running = True
-
         self.lcd.show("WELCOME HOME", ":)")
         self.gpio.unlock()
         self.mqtt.publish("WSA2025/RELAY01", "ON")
@@ -45,3 +42,5 @@ class Scenario1:
         self.lcd.show("GOODBYE")
         self.gpio.lock()
         self.mqtt.publish("WSA2025/RELAY01", "OFF")
+
+        self.state.running = False
