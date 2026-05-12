@@ -21,6 +21,7 @@ class GPIOService:
         # Relay
         GPIO.setup(self.pin, GPIO.OUT)
         GPIO.output(self.pin, GPIO.HIGH)
+        GPIO.output(self.pin, GPIO.LOW)
 
         # LEDs
         for led_pin in self.leds.values():
@@ -41,7 +42,6 @@ class GPIOService:
 
         if pin is None:
             return
-
         GPIO.output(pin, GPIO.HIGH if state == "ON" else GPIO.LOW)
 
     def cleanup(self):

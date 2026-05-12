@@ -23,8 +23,12 @@ class Scenario1:
                 self.welcome()
             else:
                 self.lcd.show("Voice Not Detected", "Access Denied")
+                self.gpio.lock()
+                self.mqtt.publish("WSA2025/RELAY01", "OFF")
         else:
             self.lcd.show("Face Not Detected", "Access Denied")
+            self.gpio.lock()
+            self.mqtt.publish("WSA2025/RELAY01", "OFF")
 
         self.state.running = False
 
