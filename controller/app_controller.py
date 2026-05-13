@@ -92,12 +92,18 @@ class AppController:
 
         elif topic == "WSA2025/RELAY01":
 
+            if not self.state.voice_detected:
+                return
+
             if payload == "ON":
                 self.scenario1.gpio.lock()
             else:
                 self.scenario1.gpio.unlock()
 
         elif topic.startswith("WSA2025/DO"):
+                
+                if not self.state.voice_detected:
+                    return
 
                 led = topic.split("/")[-1]
 

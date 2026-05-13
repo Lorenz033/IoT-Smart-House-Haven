@@ -21,7 +21,6 @@ class GPIOService:
         # Relay
         GPIO.setup(self.pin, GPIO.OUT)
         GPIO.output(self.pin, GPIO.HIGH)
-        GPIO.output(self.pin, GPIO.LOW)
 
         # LEDs
         for led_pin in self.leds.values():

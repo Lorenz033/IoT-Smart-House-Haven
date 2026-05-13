@@ -5,3 +5,4 @@ from dataclasses import dataclass
 class ScenarioState:
     welcomed: bool = False
     running: bool = False
+    voice_detected: bool = False
