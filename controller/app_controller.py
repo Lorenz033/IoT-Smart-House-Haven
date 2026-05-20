@@ -111,3 +111,13 @@ class AppController:
                     self.gpio.set_led(led, "ON")
                 else:
                     self.gpio.set_led(led, "OFF")
+
+        elif topic == "WSA2025/MOTOR01":
+
+            if not self.state.voice_detected:
+                return
+
+            if payload.upper() == "OFF":
+                self.gpio.stop_motor()
+            else:
+                self.gpio.set_motor_speed(payload)

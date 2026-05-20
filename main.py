@@ -17,6 +17,7 @@ TOPIC_DO1 = "WSA2025/DO1"
 TOPIC_DO2 = "WSA2025/DO2"
 TOPIC_DO3 = "WSA2025/DO3"
 TOPIC_DO4 = "WSA2025/DO4"
+TOPIC_MOTOR = "WSA2025/MOTOR01"
 
 
 
@@ -58,7 +59,8 @@ client = mqtt_service.connect(
         (TOPIC_DO1, 0),
         (TOPIC_DO2, 0),
         (TOPIC_DO3, 0),
-        (TOPIC_DO4, 0) 
+        (TOPIC_DO4, 0),
+        (TOPIC_MOTOR, 0)
     ]),
     on_message=controller.on_message,
     on_disconnect=lambda c, u, rc: print("Disconnected")

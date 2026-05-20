@@ -51,4 +51,10 @@ Real-time feedback
 Topic	Function
 WSA2025/DI1	Scenario trigger button
 WSA2025/RELAY01	Manual relay control
-WSA2025/MOTOR01	Motor speed control
+WSA2025/MOTOR01	DC motor speed control
+
+DC motor buttons should publish to `WSA2025/MOTOR01`:
+- `50` for 50 percent speed
+- `75` for 75 percent speed
+- `100` for 100 percent speed
+- `OFF` to stop the motor

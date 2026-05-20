@@ -6,6 +6,7 @@ class GPIOService:
 
   
         self.pin = pin
+        self.motor_speed = 0
 
   
         self.leds = {
@@ -13,6 +14,12 @@ class GPIOService:
             "DO2": 27,
             "DO3": 22,
             "DO4": 23
+        }
+
+        self.motor = {
+            "ENA": 13,
+            "IN1": 5,
+            "IN2": 6
         }
 
         GPIO.setwarnings(False)
@@ -26,6 +33,17 @@ class GPIOService:
         for led_pin in self.leds.values():
             GPIO.setup(led_pin, GPIO.OUT)
             GPIO.output(led_pin, GPIO.LOW)
+
+        # DC Motor with L298N
+        GPIO.setup(self.motor["ENA"], GPIO.OUT)
+        GPIO.setup(self.motor["IN1"], GPIO.OUT)
+        GPIO.setup(self.motor["IN2"], GPIO.OUT)
+
+        GPIO.output(self.motor["IN1"], GPIO.LOW)
+        GPIO.output(self.motor["IN2"], GPIO.LOW)
+
+        self.motor_pwm = GPIO.PWM(self.motor["ENA"], 1000)
+        self.motor_pwm.start(0)
 
   
     def lock(self):
@@ -43,5 +61,28 @@ class GPIOService:
             return
         GPIO.output(pin, GPIO.HIGH if state == "ON" else GPIO.LOW)
 
+    def set_motor_speed(self, speed):
+
+        try:
+            speed = int(speed)
+        except (TypeError, ValueError):
+            return
+
+        if speed not in (50, 75, 100):
+            return
+
+        self.motor_speed = speed
+        GPIO.output(self.motor["IN1"], GPIO.HIGH)
+        GPIO.output(self.motor["IN2"], GPIO.LOW)
+        self.motor_pwm.ChangeDutyCycle(speed)
+
+    def stop_motor(self):
+        self.motor_speed = 0
+        self.motor_pwm.ChangeDutyCycle(0)
+        GPIO.output(self.motor["IN1"], GPIO.LOW)
+        GPIO.output(self.motor["IN2"], GPIO.LOW)
+
     def cleanup(self):
+        self.stop_motor()
+        self.motor_pwm.stop()
         GPIO.cleanup()
