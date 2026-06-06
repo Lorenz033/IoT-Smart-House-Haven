@@ -28,6 +28,9 @@ class Scenario1:
             voice_ok = self.voice.detect_command()
             
             if voice_ok:
+                self.gpio.buzzer_on()
+                time.sleep(0.2)
+                self.gpio.buzzer_off()
                 self.welcome()
             else:
                 self.lcd.show("Voice Not Detected", "Access Denied")
