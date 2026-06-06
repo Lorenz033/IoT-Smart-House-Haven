@@ -31,6 +31,7 @@ class AppController:
 
         # start sensor loop automatically
         self.start_dht_loop()
+        self.start_alarm_loop()
 
     # =========================
     # 🌡️ DHT22 LOOP
@@ -63,6 +64,25 @@ class AppController:
                     print(f"🌡 Temp: {temp} | 💧 Humi: {humi}")
 
                 time.sleep(2)
+
+        threading.Thread(target=loop, daemon=True).start()
+
+    # =========================
+    # ALARM SENSOR LOOP
+    # =========================
+    def start_alarm_loop(self):
+
+        def loop():
+
+            while True:
+
+                if self.gpio.is_flame_detected():
+                    self.scenario1.fire_detected()
+
+                if self.gpio.is_smoke_detected():
+                    self.scenario1.smoke_detected()
+
+                time.sleep(0.2)
 
         threading.Thread(target=loop, daemon=True).start()
 

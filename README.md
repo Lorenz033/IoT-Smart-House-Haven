@@ -41,7 +41,7 @@ Raspberry Pi GPIO / PWM
 ⚙️ Features
 🔐 Smart Door System
 Face recognition authentication
-Voice command activation (“automatic”)
+Voice command activation ("open")
 Automatic unlock/lock via relay
 📺 LCD Feedback
 System status display

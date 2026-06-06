@@ -6,3 +6,5 @@ class ScenarioState:
     welcomed: bool = False
     running: bool = False
     voice_detected: bool = False
+    fire_detected: bool = False
+    smoke_detected: bool = False

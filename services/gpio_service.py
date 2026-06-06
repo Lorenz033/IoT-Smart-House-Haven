@@ -2,10 +2,23 @@ import RPi.GPIO as GPIO
 
 class GPIOService:
 
-    def __init__(self, pin=18):
+    def __init__(
+        self,
+        pin=18,
+        flame_pin=24,
+        smoke_pin=26,
+        buzzer_pin=25,
+        flame_active_low=True,
+        smoke_active_low=True
+    ):
 
   
         self.pin = pin
+        self.flame_pin = flame_pin
+        self.smoke_pin = smoke_pin
+        self.buzzer_pin = buzzer_pin
+        self.flame_active_low = flame_active_low
+        self.smoke_active_low = smoke_active_low
         self.motor_speed = 0
 
   
@@ -29,6 +42,17 @@ class GPIOService:
         GPIO.setup(self.pin, GPIO.OUT)
         GPIO.output(self.pin, GPIO.HIGH)
 
+        # Flame sensor and buzzer
+        flame_pull_mode = GPIO.PUD_UP if self.flame_active_low else GPIO.PUD_DOWN
+        GPIO.setup(self.flame_pin, GPIO.IN, pull_up_down=flame_pull_mode)
+
+        # Smoke sensor
+        smoke_pull_mode = GPIO.PUD_UP if self.smoke_active_low else GPIO.PUD_DOWN
+        GPIO.setup(self.smoke_pin, GPIO.IN, pull_up_down=smoke_pull_mode)
+
+        GPIO.setup(self.buzzer_pin, GPIO.OUT)
+        GPIO.output(self.buzzer_pin, GPIO.LOW)
+
         # LEDs
         for led_pin in self.leds.values():
             GPIO.setup(led_pin, GPIO.OUT)
@@ -51,6 +75,26 @@ class GPIOService:
 
     def unlock(self):
         GPIO.output(self.pin, GPIO.HIGH)
+
+    def is_flame_detected(self):
+        flame_state = GPIO.input(self.flame_pin)
+
+        if self.flame_active_low:
+            return flame_state == GPIO.LOW
+        return flame_state == GPIO.HIGH
+
+    def is_smoke_detected(self):
+        smoke_state = GPIO.input(self.smoke_pin)
+
+        if self.smoke_active_low:
+            return smoke_state == GPIO.LOW
+        return smoke_state == GPIO.HIGH
+
+    def buzzer_on(self):
+        GPIO.output(self.buzzer_pin, GPIO.HIGH)
+
+    def buzzer_off(self):
+        GPIO.output(self.buzzer_pin, GPIO.LOW)
 
   
     def set_led(self, led, state):
@@ -83,6 +127,7 @@ class GPIOService:
         GPIO.output(self.motor["IN2"], GPIO.LOW)
 
     def cleanup(self):
+        self.buzzer_off()
         self.stop_motor()
         self.motor_pwm.stop()
         GPIO.cleanup()

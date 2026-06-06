@@ -18,6 +18,8 @@ TOPIC_DO2 = "WSA2025/DO2"
 TOPIC_DO3 = "WSA2025/DO3"
 TOPIC_DO4 = "WSA2025/DO4"
 TOPIC_MOTOR = "WSA2025/MOTOR01"
+TOPIC_FIRE_STATUS = "WSA2025/FIRE_STATUS"
+TOPIC_SMOKE_STATUS = "WSA2025/SMOKE_STATUS"
 
 
 
@@ -29,7 +31,14 @@ environment = EnvironmentModel()
 # =========================
 mqtt_service = MQTTService(BROKER, PORT)
 
-gpio = GPIOService(18)
+gpio = GPIOService(
+    pin=18,
+    flame_pin=24,
+    smoke_pin=26,
+    buzzer_pin=25,
+    flame_active_low=True,
+    smoke_active_low=True
+)
 
 lcd = LCDView()
 
@@ -51,6 +60,7 @@ controller = AppController(
     sensor,
     environment 
 )
+
 
 client = mqtt_service.connect(
     on_connect=lambda c, u, f, rc: c.subscribe([

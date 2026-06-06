@@ -1,6 +1,11 @@
 # scenarios/scenario1.py
 import time
 
+FIRE_STATUS_TOPIC = "WSA2025/FIRE_STATUS"
+FIRE_STATUS_MESSAGE = "Fire Detected"
+SMOKE_STATUS_TOPIC = "WSA2025/SMOKE_STATUS"
+SMOKE_STATUS_MESSAGE = "Smoke Detected"
+
 class Scenario1:
     def __init__(self, lcd, vision, voice, gpio, mqtt, state):
         self.lcd = lcd
@@ -57,4 +62,22 @@ class Scenario1:
         self.mqtt.publish("WSA2025/DO4", "OFF")
         self.mqtt.publish("WSA2025/MOTOR01", "OFF")
         self.state.running = False
+
+    def fire_detected(self):
+        if self.state.fire_detected:
+            return
+
+        self.state.fire_detected = True
+        self.gpio.buzzer_on()
+        self.lcd.show("FIRE DETECTED", "Buzzer ON")
+        self.mqtt.publish(FIRE_STATUS_TOPIC, FIRE_STATUS_MESSAGE)
+
+    def smoke_detected(self):
+        if self.state.smoke_detected:
+            return
+
+        self.state.smoke_detected = True
+        self.gpio.buzzer_on()
+        self.lcd.show("SMOKE DETECTED", "Buzzer ON")
+        self.mqtt.publish(SMOKE_STATUS_TOPIC, SMOKE_STATUS_MESSAGE)
 
