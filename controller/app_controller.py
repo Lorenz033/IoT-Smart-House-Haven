@@ -148,3 +148,13 @@ class AppController:
                 self.gpio.stop_motor()
             else:
                 self.gpio.set_motor_speed(payload)
+
+        elif topic == "WSA2025/BUZZER01":
+
+            if not self.state.welcomed or not self.state.voice_detected:
+                return
+
+            if payload.upper() == "ON":
+                self.gpio.buzzer_on()
+            else:
+                self.gpio.buzzer_off()

@@ -22,6 +22,9 @@ class Scenario1:
 
         if face_ok:
             self.lcd.show("Face Detected", "Checking Voice...")
+            self.gpio.buzzer_on()
+            time.sleep(0.2)
+            self.gpio.buzzer_off()
             voice_ok = self.voice.detect_command()
             
             if voice_ok:
@@ -66,6 +69,7 @@ class Scenario1:
         self.mqtt.publish("WSA2025/DO3", "OFF")
         self.mqtt.publish("WSA2025/DO4", "OFF")
         self.mqtt.publish("WSA2025/MOTOR01", "OFF")
+        self.mqtt.publish("WSA2025/BUZZER01", "OFF")
         self.state.voice_detected = False
         self.state.running = False
 
