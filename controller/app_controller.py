@@ -119,7 +119,7 @@ class AppController:
 
         elif topic == "WSA2025/RELAY01":
 
-            if not self.state.voice_detected:
+            if not self.state.welcomed or not self.state.voice_detected:
                 return
 
             if payload == "ON":
@@ -129,7 +129,7 @@ class AppController:
 
         elif topic.startswith("WSA2025/DO"):
                 
-                if not self.state.voice_detected:
+                if not self.state.welcomed or not self.state.voice_detected:
                     return
 
                 led = topic.split("/")[-1]
@@ -141,7 +141,7 @@ class AppController:
 
         elif topic == "WSA2025/MOTOR01":
 
-            if not self.state.voice_detected:
+            if not self.state.welcomed or not self.state.voice_detected:
                 return
 
             if payload.upper() == "OFF":

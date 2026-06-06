@@ -55,12 +55,18 @@ class Scenario1:
         self.lcd.show("GOODBYE")
         self.gpio.lock()
         self.gpio.stop_motor()
+        self.gpio.buzzer_off()
+
+        for led in ("DO1", "DO2", "DO3", "DO4"):
+            self.gpio.set_led(led, "OFF")
+
         self.mqtt.publish("WSA2025/RELAY01", "OFF")
         self.mqtt.publish("WSA2025/DO1", "OFF")
         self.mqtt.publish("WSA2025/DO2", "OFF")
         self.mqtt.publish("WSA2025/DO3", "OFF")
         self.mqtt.publish("WSA2025/DO4", "OFF")
         self.mqtt.publish("WSA2025/MOTOR01", "OFF")
+        self.state.voice_detected = False
         self.state.running = False
 
     def fire_detected(self):
