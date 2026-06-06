@@ -99,7 +99,14 @@ class AppController:
             if self.state.running:
                 return
 
-            if not self.state.welcomed:
+            command = payload.upper()
+
+            if command in ("OFF", "LEAVE", "GOODBYE", "0"):
+                threading.Thread(
+                    target=self.scenario1.leave,
+                    daemon=True
+                ).start()
+            elif not self.state.welcomed:
                 threading.Thread(
                     target=self.scenario1.run,
                     daemon=True
