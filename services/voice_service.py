@@ -1,6 +1,5 @@
 # services/voice_service.py
 import json
-import time
 
 import pyaudio
 from vosk import Model, KaldiRecognizer
@@ -49,7 +48,7 @@ class VoiceService:
     # =========================
     # VOICE DETECTION
     # =========================
-    def detect_command(self, keyword="open", timeout=10):
+    def detect_command(self, keyword="open"):
         rec = KaldiRecognizer(self.model, 16000)
 
         p = pyaudio.PyAudio()
@@ -72,9 +71,7 @@ class VoiceService:
 
             print("Listening... say:", keyword)
 
-            deadline = time.monotonic() + timeout
-
-            while time.monotonic() < deadline:
+            while True:
                 data = stream.read(4000, exception_on_overflow=False)
 
                 if rec.AcceptWaveform(data):
@@ -84,9 +81,6 @@ class VoiceService:
                     if keyword in text.lower():
                         print("Voice command detected!")
                         return True
-
-            print("Voice command timeout")
-            return False
         except OSError as exc:
             print("Failed to open microphone, rescanning:", exc)
             self.mic_index = self.find_mic()
