@@ -52,7 +52,7 @@ class Scenario1:
     def leave(self):
         self.state.welcomed = False
         self.state.running = True
-        self.lcd.show("GOODBYE")
+        self.lcd.show("GOODBYE: Locked")
         self.gpio.lock()
         self.gpio.stop_motor()
         self.gpio.buzzer_off()
@@ -82,8 +82,8 @@ class Scenario1:
         if self.state.smoke_detected:
             return
 
+
         self.state.smoke_detected = True
         self.gpio.buzzer_on()
         self.lcd.show("SMOKE DETECTED", "Buzzer ON")
         self.mqtt.publish(SMOKE_STATUS_TOPIC, SMOKE_STATUS_MESSAGE)
-
