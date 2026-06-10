@@ -53,6 +53,8 @@ class Scenario1:
         self.mqtt.publish("WSA2025/DO2", "ON")
         self.mqtt.publish("WSA2025/DO3", "ON")
         self.mqtt.publish("WSA2025/DO4", "ON")
+        self.mqtt.publish("WSA2025/DO5", "ON")
+        self.mqtt.publish("WSA2025/DO6", "ON")
         self.mqtt.publish("WSA2025/MOTOR01", "50")
 
     def leave(self):
@@ -63,7 +65,7 @@ class Scenario1:
         self.gpio.stop_motor()
         self.gpio.buzzer_off()
 
-        for led in ("DO1", "DO2", "DO3", "DO4"):
+        for led in ("DO1", "DO2", "DO3", "DO4", "DO5", "DO6"):
             self.gpio.set_led(led, "OFF")
 
         self.mqtt.publish("WSA2025/RELAY01", "OFF")
@@ -71,6 +73,8 @@ class Scenario1:
         self.mqtt.publish("WSA2025/DO2", "OFF")
         self.mqtt.publish("WSA2025/DO3", "OFF")
         self.mqtt.publish("WSA2025/DO4", "OFF")
+        self.mqtt.publish("WSA2025/DO5", "OFF")
+        self.mqtt.publish("WSA2025/DO6", "OFF")
         self.mqtt.publish("WSA2025/MOTOR01", "OFF")
         self.mqtt.publish("WSA2025/BUZZER01", "OFF")
         self.state.voice_detected = False

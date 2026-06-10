@@ -26,7 +26,9 @@ class GPIOService:
             "DO1": 17,
             "DO2": 27,
             "DO3": 22,
-            "DO4": 23
+            "DO4": 23,
+            "DO5": 16,
+            "DO6": 20
         }
 
         self.motor = {
