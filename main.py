@@ -23,6 +23,7 @@ TOPIC_DO7 = "WSA2025/DO7"
 TOPIC_DO8 = "WSA2025/DO8"
 TOPIC_MOTOR = "WSA2025/MOTOR01"
 TOPIC_BUZZER = "WSA2025/BUZZER01"
+TOPIC_DOOR = "WSA2025/DOOR01"
 TOPIC_FIRE_STATUS = "WSA2025/FIRE_STATUS"
 TOPIC_SMOKE_STATUS = "WSA2025/SMOKE_STATUS"
 
@@ -41,6 +42,7 @@ gpio = GPIOService(
     flame_pin=24,
     smoke_pin=26,
     buzzer_pin=25,
+    servo_pin=19,
     flame_active_low=True,
     smoke_active_low=True
 )
@@ -80,7 +82,8 @@ client = mqtt_service.connect(
         (TOPIC_DO7, 0),
         (TOPIC_DO8, 0),
         (TOPIC_MOTOR, 0),
-        (TOPIC_BUZZER, 0)
+        (TOPIC_BUZZER, 0),
+        (TOPIC_DOOR, 0)
     ]),
     on_message=controller.on_message,
     on_disconnect=lambda c, u, rc: print("Disconnected")

@@ -47,6 +47,7 @@ class Scenario1:
         self.state.voice_detected = True
         self.lcd.show("WELCOME HOME", ":)")
         self.gpio.unlock()
+        self.gpio.open_door()
         self.gpio.set_motor_speed(50)
         self.mqtt.publish("WSA2025/RELAY01", "ON")
         self.mqtt.publish("WSA2025/DO1", "ON")
@@ -58,12 +59,14 @@ class Scenario1:
         self.mqtt.publish("WSA2025/DO7", "ON")
         self.mqtt.publish("WSA2025/DO8", "ON")
         self.mqtt.publish("WSA2025/MOTOR01", "50")
+        self.mqtt.publish("WSA2025/DOOR01", "ON")
 
     def leave(self):
         self.state.welcomed = False
         self.state.running = True
         self.lcd.show("GOODBYE: Locked")
         self.gpio.lock()
+        self.gpio.close_door()
         self.gpio.stop_motor()
         self.gpio.buzzer_off()
 
@@ -81,6 +84,7 @@ class Scenario1:
         self.mqtt.publish("WSA2025/DO8", "OFF")
         self.mqtt.publish("WSA2025/MOTOR01", "OFF")
         self.mqtt.publish("WSA2025/BUZZER01", "OFF")
+        self.mqtt.publish("WSA2025/DOOR01", "OFF")
         self.state.voice_detected = False
         self.state.running = False
 

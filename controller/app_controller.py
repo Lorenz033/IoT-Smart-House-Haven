@@ -97,6 +97,7 @@ class AppController:
 
         self.mqtt.publish("WSA2025/MOTOR01", "OFF")
         self.mqtt.publish("WSA2025/BUZZER01", "OFF")
+        self.mqtt.publish("WSA2025/DOOR01", "OFF")
 
     def turn_all_modules_on(self):
         self.gpio.all_on()
@@ -106,6 +107,7 @@ class AppController:
 
         self.mqtt.publish("WSA2025/MOTOR01", "50")
         self.mqtt.publish("WSA2025/BUZZER01", "OFF")
+        self.mqtt.publish("WSA2025/DOOR01", "ON")
 
     def on_message(self, client, userdata, msg):
 
@@ -145,6 +147,13 @@ class AppController:
                 self.state.welcomed = False
                 self.state.voice_detected = False
                 self.turn_all_modules_off()
+
+        elif topic == "WSA2025/DOOR01":
+
+            if not self.state.welcomed or not self.state.voice_detected:
+                return
+
+            self.gpio.set_door(payload.upper())
 
         elif topic.startswith("WSA2025/DO"):
                 

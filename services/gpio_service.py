@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+from gpiozero import AngularServo
 
 class GPIOService:
 
@@ -8,6 +9,7 @@ class GPIOService:
         flame_pin=24,
         smoke_pin=26,
         buzzer_pin=25,
+        servo_pin=19,
         flame_active_low=True,
         smoke_active_low=True
     ):
@@ -17,6 +19,7 @@ class GPIOService:
         self.flame_pin = flame_pin
         self.smoke_pin = smoke_pin
         self.buzzer_pin = buzzer_pin
+        self.servo_pin = servo_pin
         self.flame_active_low = flame_active_low
         self.smoke_active_low = smoke_active_low
         self.motor_speed = 0
@@ -73,6 +76,14 @@ class GPIOService:
         self.motor_pwm = GPIO.PWM(self.motor["ENA"], 1000)
         self.motor_pwm.start(0)
 
+        # MG90S door servo
+        self.door_servo = AngularServo(
+            self.servo_pin,
+            min_pulse_width=0.0006,
+            max_pulse_width=0.0023
+        )
+        self.close_door()
+
   
     def lock(self):
         GPIO.output(self.pin, GPIO.LOW)
@@ -99,6 +110,18 @@ class GPIOService:
 
     def buzzer_off(self):
         GPIO.output(self.buzzer_pin, GPIO.LOW)
+
+    def open_door(self):
+        self.door_servo.angle = 90
+
+    def close_door(self):
+        self.door_servo.angle = -1
+
+    def set_door(self, state):
+        if state in ("ON", "OPEN"):
+            self.open_door()
+        else:
+            self.close_door()
 
   
     def set_led(self, led, state):
@@ -132,6 +155,7 @@ class GPIOService:
 
     def all_off(self):
         self.lock()
+        self.close_door()
         self.stop_motor()
         self.buzzer_off()
 
@@ -140,6 +164,7 @@ class GPIOService:
 
     def all_on(self):
         self.unlock()
+        self.open_door()
         self.set_motor_speed(50)
         self.buzzer_off()
 
@@ -149,4 +174,5 @@ class GPIOService:
     def cleanup(self):
         self.all_off()
         self.motor_pwm.stop()
+        self.door_servo.close()
         GPIO.cleanup()
