@@ -138,6 +138,14 @@ class GPIOService:
         for led in self.leds:
             self.set_led(led, "OFF")
 
+    def all_on(self):
+        self.unlock()
+        self.set_motor_speed(50)
+        self.buzzer_off()
+
+        for led in self.leds:
+            self.set_led(led, "ON")
+
     def cleanup(self):
         self.all_off()
         self.motor_pwm.stop()

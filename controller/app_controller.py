@@ -98,6 +98,15 @@ class AppController:
         self.mqtt.publish("WSA2025/MOTOR01", "OFF")
         self.mqtt.publish("WSA2025/BUZZER01", "OFF")
 
+    def turn_all_modules_on(self):
+        self.gpio.all_on()
+
+        for led in ("DO1", "DO2", "DO3", "DO4", "DO5", "DO6", "DO7", "DO8"):
+            self.mqtt.publish(f"WSA2025/{led}", "ON")
+
+        self.mqtt.publish("WSA2025/MOTOR01", "50")
+        self.mqtt.publish("WSA2025/BUZZER01", "OFF")
+
     def on_message(self, client, userdata, msg):
 
         topic = msg.topic
@@ -129,10 +138,9 @@ class AppController:
         elif topic == "WSA2025/RELAY01":
 
             if payload.upper() == "ON":
-                if not self.state.welcomed or not self.state.voice_detected:
-                    return
-
-                self.gpio.unlock()
+                self.state.welcomed = True
+                self.state.voice_detected = True
+                self.turn_all_modules_on()
             else:
                 self.state.welcomed = False
                 self.state.voice_detected = False
