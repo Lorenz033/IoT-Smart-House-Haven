@@ -89,6 +89,15 @@ class AppController:
     # =========================
     # MQTT CALLBACK
     # =========================
+    def turn_all_modules_off(self):
+        self.gpio.all_off()
+
+        for led in ("DO1", "DO2", "DO3", "DO4", "DO5", "DO6", "DO7", "DO8"):
+            self.mqtt.publish(f"WSA2025/{led}", "OFF")
+
+        self.mqtt.publish("WSA2025/MOTOR01", "OFF")
+        self.mqtt.publish("WSA2025/BUZZER01", "OFF")
+
     def on_message(self, client, userdata, msg):
 
         topic = msg.topic
@@ -119,13 +128,15 @@ class AppController:
 
         elif topic == "WSA2025/RELAY01":
 
-            if not self.state.welcomed or not self.state.voice_detected:
-                return
+            if payload.upper() == "ON":
+                if not self.state.welcomed or not self.state.voice_detected:
+                    return
 
-            if payload == "ON":
-                self.scenario1.gpio.lock()
+                self.gpio.unlock()
             else:
-                self.scenario1.gpio.unlock()
+                self.state.welcomed = False
+                self.state.voice_detected = False
+                self.turn_all_modules_off()
 
         elif topic.startswith("WSA2025/DO"):
                 

@@ -130,8 +130,15 @@ class GPIOService:
         GPIO.output(self.motor["IN1"], GPIO.LOW)
         GPIO.output(self.motor["IN2"], GPIO.LOW)
 
-    def cleanup(self):
-        self.buzzer_off()
+    def all_off(self):
+        self.lock()
         self.stop_motor()
+        self.buzzer_off()
+
+        for led in self.leds:
+            self.set_led(led, "OFF")
+
+    def cleanup(self):
+        self.all_off()
         self.motor_pwm.stop()
         GPIO.cleanup()
