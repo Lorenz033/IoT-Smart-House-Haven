@@ -17,7 +17,12 @@ TOPIC_DO1 = "WSA2025/DO1"
 TOPIC_DO2 = "WSA2025/DO2"
 TOPIC_DO3 = "WSA2025/DO3"
 TOPIC_DO4 = "WSA2025/DO4"
+TOPIC_DO5 = "WSA2025/DO5"
+TOPIC_DO6 = "WSA2025/DO6"
+TOPIC_DO7 = "WSA2025/DO7"
+TOPIC_DO8 = "WSA2025/DO8"
 TOPIC_MOTOR = "WSA2025/MOTOR01"
+TOPIC_BUZZER = "WSA2025/BUZZER01"
 TOPIC_FIRE_STATUS = "WSA2025/FIRE_STATUS"
 TOPIC_SMOKE_STATUS = "WSA2025/SMOKE_STATUS"
 
@@ -70,7 +75,12 @@ client = mqtt_service.connect(
         (TOPIC_DO2, 0),
         (TOPIC_DO3, 0),
         (TOPIC_DO4, 0),
-        (TOPIC_MOTOR, 0)
+        (TOPIC_DO5, 0),
+        (TOPIC_DO6, 0),
+        (TOPIC_DO7, 0),
+        (TOPIC_DO8, 0),
+        (TOPIC_MOTOR, 0),
+        (TOPIC_BUZZER, 0)
     ]),
     on_message=controller.on_message,
     on_disconnect=lambda c, u, rc: print("Disconnected")
